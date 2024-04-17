@@ -1,7 +1,9 @@
 ﻿
 
 
+using ReadDemo;
 using ReadDemo.Contexts;
+using ReadDemo.Entities;
 
 //SelectDemo1();
 
@@ -25,8 +27,71 @@ using ReadDemo.Contexts;
 
 //OrderByDemo2();
 
+//GroupByDemo1();
+
+//GrroupByDemo2();
+//GroupByDemo3();
+//DistinctDemo1();
 
 
+//HavingDemo();
+
+
+//ComboOrnekDemo();
+
+
+
+/*
+ * 
+T-SQL 
+TOP
+OFFSET
+.
+.
+.
+
+SQL standardında
+MIN
+MAX
+AVG
+SUM
+COUNT
+
+ */
+//TopDemo();
+
+
+//OffSetDemo();
+
+
+//AggregationDemo();
+
+
+
+
+/*
+First()            ------> Birden fazla kayıt varsa ilkini döner, hiç kayıt dönmezse hata verir.
+FirstorDefault()   ------> Birden fazla kayıt varsa ilkini döner, hiç kayıt dönmezse default değer atar.
+Last()             ------> Birden fazla kayıt varsa sonuncusunu döner, hiç kayıt dönmezse hata verir.
+LastorDefault()    ------> Birden fazla kayıt varsa sonuncusunu döner, hiç kayıt dönmezse default değer atar.
+Single()           ------> Bir kayıt dönerse onu verir, birden fazla kayıt dönerse ya da hiç kayıt dönmezse hata verir.
+SingleorDefault()  ------> Bir kayıt dönerse onu verir, birden fazla kayıt dönerse hata verir, ya da hiç kayıt dönmezse default değer atar.
+ */
+
+//FirstLastSingleDemo();
+
+
+//AnyCountAllDemo();
+
+
+//InnerJoinDemo();
+//InnerJoinDemo2();
+
+
+
+Console.ReadLine(); 
+
+Console.WriteLine("Bitti");
 
 #region Select Sorgular
 
@@ -188,4 +253,329 @@ static void OrderByDemo2()
         }
     }
 }
+
+
 #endregion
+
+#region Group By Sorguları
+
+static void GroupByDemo1()
+{
+    using (var context = new NorthwindContext())
+    {
+
+        var countries = context.Customers.GroupBy(x => x.Country).Select(x => x.Key) // Entity frmaework grupladığı alanları key propertisine set eder, buna erişmek için KEY keyword'ü kullanılır.
+            .ToList();
+
+
+        foreach (var country in countries)
+        {
+            Console.WriteLine(country);
+        }
+    }
+}
+
+static void GrroupByDemo2()
+{
+    using (var context = new NorthwindContext())
+    {
+
+        var datas = context.Customers.GroupBy(x => new { x.Country, x.City }) // İki veya daha fazla alan gruplamak etmek için anonim tip oluşturduk. 
+        .Select(x => new
+        {
+            Sehir = x.Key.City,
+            Ulke = x.Key.Country //Burada yalnızca Key deseydik aynı kolon adlarıyla grupladığımız iki kolonu da görebilirdik. Kendimiz kolon adlarını değiştirdik.
+        })
+        .ToList();
+
+
+        foreach (var data in datas)
+        {
+            Console.WriteLine($"{data.Ulke}->{data.Sehir}");
+        }
+    }
+}
+
+static void GroupByDemo3()
+{
+    using (var context = new NorthwindContext())
+    {
+
+        var datas = context.Customers.GroupBy(x => new { x.Country, x.City })
+        .Select(x => new
+        {
+            Ulke = x.Key.Country,
+            x.Key.City, //Hepsine isim vermek zorunda değiliz.
+            Toplam = x.Count() // Count alacaksak anonim tip kullanmak zorundayız. Group by ın içerisinde böyle bir kolon yok, yalnızca key kullansaydık iki kolonumuz olurdu.(city,Country)
+        })
+        .ToList();
+
+
+        foreach (var data in datas)
+        {
+            Console.WriteLine($"{data.Ulke}->{data.City}->{data.Toplam}");
+        }
+    }
+}
+
+
+#endregion
+
+
+#region Distinct Sorguları
+
+
+static void DistinctDemo1()
+{
+    using (var context = new NorthwindContext())
+    {
+
+        var datas = context.Customers.Select(x => new { x.Country, x.City }).Distinct().ToList();
+        //Distinct içerisine func almaz, o yüzden önce select yapıp seçtiğimiz alanlara göre distinct lemeliyiz.
+
+
+        foreach (var data in datas)
+        {
+            Console.WriteLine($"{data.Country}->{data.City}");
+        }
+    }
+}
+
+
+
+#endregion
+
+
+#region Having Sorgusu
+static void HavingDemo()
+{
+    using (var context = new NorthwindContext())
+    {
+
+        var datas = context.Customers.GroupBy(x => x.Country).Where(x => x.Count() >= 10) //Having için ayrı bi keyword yoktur. Grupladıktan sonra yazarsak having gibi çalışır.
+           .Select(x => new
+           {
+               Country = x.Key,
+               Total = x.Count()
+
+           }).ToList();
+
+
+
+        foreach (var data in datas)
+        {
+            Console.WriteLine($"{data.Country}->{data.Total}");
+        }
+    }
+}
+
+
+#endregion
+
+
+#region Genel Örnek
+
+static void ComboOrnekDemo()
+{
+    using (var context = new NorthwindContext())
+    {
+
+        var datas = context.Customers
+            .Where(x => x.CompanyName.Contains("a"))
+            .GroupBy(x => new
+            {
+                x.Country,
+                x.City
+            })
+           .Where(x => x.Count() >= 2)
+           .Select(x => new
+           {
+               Ulke = x.Key.Country,
+               Sehir = x.Key.City,
+               Total = x.Count()
+
+           })
+           .OrderByDescending(x => x.Total)
+           .ToList();
+
+        //  select Country,City,count(*) as Total from Customers where CompanyName like '%a%' group by Country,City having count(*)>=2  order by Total desc 
+
+        foreach (var data in datas)
+        {
+            Console.WriteLine($"{data.Ulke}->{data.Sehir}->{data.Total}");
+        }
+    }
+}
+
+#endregion
+
+
+#region T-SQL
+
+static void TopDemo()
+{
+    using (var context = new NorthwindContext())
+    {
+
+        //var datas = context.Products.Take(5).ToList(); //Take komutu sql deki top a karşılık gelir
+        var datas = context.Products.Take(5).OrderByDescending(x => x.UnitPrice).ToList(); // Sırada take önce bile olsa tüm datayı getirip sıralar onra en pahalı beşi alır.
+
+        //  select Country,City,count(*) as Total from Customers where CompanyName like '%a%' group by Country,City having count(*)>=2  order by Total desc 
+
+        foreach (var data in datas)
+        {
+            Console.WriteLine($"{data.ProductId}->{data.ProductName}->{data.UnitPrice}");
+        }
+    }
+}
+
+static void OffSetDemo()
+{
+    using (var context = new NorthwindContext())
+    {
+        //OFFSET paging işlemlerinde kullanılır. İlk 5 kaydı atla sonraki kayıtları getir gibi
+
+        var datas = context.Products.Skip(5).Take(10).ToList(); //İlk 5 kaydı atla,sonraki 10 kaydı getir. SQL de offset Skip in yaptığı işi yapar.
+
+
+        foreach (var data in datas)
+        {
+            Console.WriteLine($"{data.ProductId}->{data.ProductName}->{data.UnitPrice}");
+        }
+    }
+}
+
+
+#endregion
+
+
+#region Aggregation Sorguları
+static void AggregationDemo()
+{
+    using (var context = new NorthwindContext())
+    {
+
+        //Max,Min,Sum,Average,Count
+
+        decimal enPahaliUrun = context.Products.Max(x => x.UnitPrice);
+        decimal enUcuzUrun = context.Products.Min(x => x.UnitPrice);
+        int toplamStokAdedi = context.Products.Sum(x => x.UnitsInStock);
+        var ortalamaUrunFiyati = context.Products.Average(x => x.UnitPrice);
+        var toplamUrunAdedi = context.Products.Count();
+        var stoguBulunmayanUrunAdedi = context.Products.Count(x=>x.UnitsInStock==0);
+
+
+        Console.WriteLine($"En Pahalı Ürün Fiyat : {enPahaliUrun}");
+        Console.WriteLine($"En Ucu Ürün Fiyat : {enUcuzUrun}");
+        Console.WriteLine($"Ortalama Ürün Fiyat : {ortalamaUrunFiyati}");
+        Console.WriteLine($"Toplam Stok Miktarı : {toplamStokAdedi}");
+        Console.WriteLine($"Toplam Ürün Adedi : {toplamUrunAdedi}");
+        Console.WriteLine($"Stoğu Bulunmayan Ürün Adedi : {stoguBulunmayanUrunAdedi}");
+
+    }
+}
+
+
+#endregion
+
+
+#region FirstLastSingle Sorgular
+static void FirstLastSingleDemo()
+{
+    using (var context = new NorthwindContext())
+    {
+
+
+
+        //First()
+        //FirstorDefault()
+        //Last()
+        //LastorDefault()
+        //Single()
+        //SingleorDefault()
+
+        //Customer customer = context.Customers.First();
+        //Customer customer = context.Customers.First(x=>x.CustomerId=="ANTON");
+
+        //Customer customer = context.Customers.FirstOrDefault(x=>x.CustomerId=="ANTON");
+        //Customer customer = context.Customers.Last(x=>x.Country=="Germany");
+        //Customer customer = context.Customers.LastOrDefault(x=>x.Country=="Germany2");
+        //Customer customer = context.Customers.Single(x=>x.CustomerId=="ALFKI");
+        Customer customer = context.Customers.SingleOrDefault(x => x.CustomerId == "ALFKI2");
+        Customer customer2 = context.Customers.Where(x => x.CustomerId == "ALFKI").ToList()[0];
+        //Yukarıdakiler obje döndü. Where ile yazmak istersek list döner, objeye çevirmek için list e çevirip 0ncı indeksini alırız.
+
+    }
+}
+
+
+#endregion
+
+
+#region AnyAll Sorguları
+static void AnyCountAllDemo()
+{
+    using (var context = new NorthwindContext())
+    {
+        bool isExist = context.Customers.Any(x => x.CustomerId == "SLD");
+        bool isExist2 = context.Customers.Count(x => x.CustomerId == "SLD") > 0;
+        bool tumUrunlerBirLiradanPahaliMi = context.Products.All(x => x.UnitPrice > 2); // Tüm ürünlerin fiyatı 2 den büyükse true döner.
+
+        Console.WriteLine($"SLD Müşterisi Var Mı: {isExist}");
+        Console.WriteLine($"SLD Müşterisi Var Mı: {isExist2}");
+        Console.WriteLine($"Tüm Ürünler Bir Liradan Pahalı Mı: {tumUrunlerBirLiradanPahaliMi}");
+    }
+}
+
+#endregion
+
+#region Joinler
+
+static void InnerJoinDemo()
+{
+    using (var context = new NorthwindContext())
+    {
+        var products = context.Products.Join(context.Categories, p => p.CategoryId, c => c.CategoryId, (p, c) => new // 4 adet parametre set ettik
+                                                                                                                     //ilki neyle joinleneceği iki ve üç neyle joinleneceği dört nerelerin select edileceği (anonim tip olarak )
+                                                                                                                     //Sadece products ın tamamını seçseydik new yerine p yazacaktık.
+        {
+            p.ProductId,
+            p.ProductName,
+            c.CategoryName,
+            p.UnitPrice
+        });
+
+        foreach (var product in products)
+        {
+            Console.WriteLine($"{product.ProductId}->{product.ProductName}->{product.CategoryName}");
+        }
+    }
+}
+
+static void InnerJoinDemo2()
+{
+    using (var context = new NorthwindContext())
+    {
+        //Anonim tip yerine custom tipte select yapıyor. Return edilecekse böyle yapmak zorundayız. Fonksiyon voidse anonim tip kullanılabilir.
+        //Join yerine GroupJoin kullanılırsa left join yapar.
+        var products = context.Products.Join(context.Categories, p => p.CategoryId, c => c.CategoryId, (p, c) => new ProductDTO
+        {
+            Id = p.ProductId,
+            Name = p.ProductName,
+            CategoryName = c.CategoryName,
+            UnitPrice = p.UnitPrice
+        });
+
+        foreach (var product in products)
+        {
+            Console.WriteLine($"{product.Id}->{product.Name}->{product.CategoryName}");
+        }
+    }
+}
+#endregion
+
+
+
+
+
+

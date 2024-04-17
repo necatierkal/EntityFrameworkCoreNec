@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreateUpdateDeleteDemo", "C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReadDemo", "ReadDemo\ReadDemo.csproj", "{81DD71DC-67D5-4352-9EF5-F7286349892D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinqDemo", "LinqDemo\LinqDemo.csproj", "{CD1967F6-6981-4EF3-BF04-03D1577C41F1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{81DD71DC-67D5-4352-9EF5-F7286349892D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81DD71DC-67D5-4352-9EF5-F7286349892D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{81DD71DC-67D5-4352-9EF5-F7286349892D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD1967F6-6981-4EF3-BF04-03D1577C41F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD1967F6-6981-4EF3-BF04-03D1577C41F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD1967F6-6981-4EF3-BF04-03D1577C41F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD1967F6-6981-4EF3-BF04-03D1577C41F1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
