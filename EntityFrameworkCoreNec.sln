@@ -3,13 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34525.116
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FirstDemo", "FirstDemo\FirstDemo.csproj", "{2A586F22-DB17-4AC2-B993-28E58E399240}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FirstDemo", "FirstDemo\FirstDemo.csproj", "{2A586F22-DB17-4AC2-B993-28E58E399240}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreateUpdateDeleteDemo", "CreateUpdateDeleteDemo\CreateUpdateDeleteDemo.csproj", "{5025D881-9ED4-43FE-ADA1-F99EE0CAAC2A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CreateUpdateDeleteDemo", "CreateUpdateDeleteDemo\CreateUpdateDeleteDemo.csproj", "{5025D881-9ED4-43FE-ADA1-F99EE0CAAC2A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReadDemo", "ReadDemo\ReadDemo.csproj", "{81DD71DC-67D5-4352-9EF5-F7286349892D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReadDemo", "ReadDemo\ReadDemo.csproj", "{81DD71DC-67D5-4352-9EF5-F7286349892D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinqDemo", "LinqDemo\LinqDemo.csproj", "{CD1967F6-6981-4EF3-BF04-03D1577C41F1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinqDemo", "LinqDemo\LinqDemo.csproj", "{CD1967F6-6981-4EF3-BF04-03D1577C41F1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransactionDemo", "TransactionDemo\TransactionDemo.csproj", "{F879C31D-3046-4494-A77E-1A62351067A4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MappingDemo", "MappingDemo\MappingDemo.csproj", "{C3E4D68F-3A14-4C58-AFF4-529FA813138A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +37,14 @@ Global
 		{CD1967F6-6981-4EF3-BF04-03D1577C41F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CD1967F6-6981-4EF3-BF04-03D1577C41F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CD1967F6-6981-4EF3-BF04-03D1577C41F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F879C31D-3046-4494-A77E-1A62351067A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F879C31D-3046-4494-A77E-1A62351067A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F879C31D-3046-4494-A77E-1A62351067A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F879C31D-3046-4494-A77E-1A62351067A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3E4D68F-3A14-4C58-AFF4-529FA813138A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3E4D68F-3A14-4C58-AFF4-529FA813138A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3E4D68F-3A14-4C58-AFF4-529FA813138A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3E4D68F-3A14-4C58-AFF4-529FA813138A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

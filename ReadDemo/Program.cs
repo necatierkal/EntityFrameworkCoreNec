@@ -1,9 +1,11 @@
 ﻿
 
 
+using Microsoft.EntityFrameworkCore;
 using ReadDemo;
 using ReadDemo.Contexts;
 using ReadDemo.Entities;
+using System.Runtime.InteropServices;
 
 //SelectDemo1();
 
@@ -87,6 +89,30 @@ SingleorDefault()  ------> Bir kayıt dönerse onu verir, birden fazla kayıt d�
 //InnerJoinDemo();
 //InnerJoinDemo2();
 
+
+using (var context = new NorthwindContext())
+{
+    //var custId = "ALFKI";    
+    //var customers = context.Database.ExecuteSqlRaw("update customers set ContactName=Salih Demiroğ where CustomerId={0}",custId); 
+    //ExecuteSqlRaw ile sql sorgusunu direkt yazabiliriz, parametrik gösterime dikkat edilmeli. + ile bölüp değişkeni araya yazrsak sql injection yapılabilir.
+    //var customers2 = context.Database.ExecuteSqlInterpolated($"update customers set ContactName=Salih Demiroğ where CustomerId={0}", custId);
+    //var customers2 = context.Customers.FromSqlInterpolated($"select * from Customers where Country = 'Germany'").ToList();
+    //var city = "Madrid";
+    //var customers2 = context.Customers.
+    //    FromSqlInterpolated($"select * from Customers where Country = {city}")
+    //    .Where(x=>x.Country == "Spain").ToList();
+    //FromSqlInterpolatd Iquaryable dır. Execute etmek için tolist kullandık. Sonuç üzerinden sorgulama yapılabilir. (Where, order by eklenebilir.)
+    //Uzun sorgular olmadıkça kullanılmaması gerekir. Uzun sorgular da View olarak eklenebilir linq ya da lambda expression ile sorgulanabilir.
+    //Fluent mapping ile view alınırsa maplanirken hasno key seçilirse viewlar yöneilebilir. Bu özellik EntityFramework Core da mevcut.
+
+    context.Database.ExecuteSqlRaw(@"create proc GetProducts @categoryId int   //Birden fazla satır yazacağımız için @ koyduk başına.
+                                     as begin
+                                     select * from Products where CategoryId = @categoryId
+                                     end");
+
+    var categoryId = 1;
+    var products = context.Products.FromSqlInterpolated($"Exec dbo.GetProducts {categoryId}"); //Dönen datayı Produts DbSetine set ettik.
+}
 
 
 Console.ReadLine(); 
