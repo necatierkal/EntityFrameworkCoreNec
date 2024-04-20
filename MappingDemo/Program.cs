@@ -16,7 +16,22 @@ using MappingDemo;
 
 using (var context = new MsbStoreContext())
 {
-    context.Database.EnsureCreated(); 
+    context.Database.EnsureCreated();
+
+    //var allProducts = context.Products.AsNoTracking().ToList();
+    //var productsForAdmin = context.Products.IgnoreQueryFilters().ToList();
+
+
+    //var product = context.Products.AsNoTracking().Single(t => t.Id == 1);
+    //product.UnitPrice = 209;
+
+    //var entry = context.Entry(product);
+    //entry.State = EntityState.Added;
+
+
+    //var product = context.Products.AsTracking().Single(t => t.Id == 1);
+
+    //context.SaveChanges();
 }
 
 Console.WriteLine("DB İşlemi Tamamlandı");
